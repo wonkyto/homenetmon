@@ -4165,7 +4165,7 @@
 [[inputs.snmp]]
   agents = [ "192.168.0.1", "192.168.0.2", "192.168.0.4", "192.168.0.5" ]
   version = 2
-  community = "843hiurnknfelw"
+  community = "public"
   interval = "60s"
 
   [[inputs.snmp.field]]
