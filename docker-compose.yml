@@ -1,0 +1,45 @@
+version: '2.2'
+services:
+  telegraf:
+    image: wonkyto/telegraf:latest
+    depends_on:
+      - influxdb
+    networks:
+      - influxdb
+    restart: always
+    volumes:
+      - './telegraf/telegraf.conf:/etc/telegraf/telegraf.conf:ro'
+      - './speedtest/.config:/root/.config:ro'
+    ports:
+      - "192.168.2.19:8125:8125/tcp" # StatsD
+      - "192.168.2.19:8092:8092/udp" # UDP
+      - "192.168.2.19:8094:8094/tcp" # TCP
+  influxdb:
+    image: "influxdb:latest"
+    networks:
+      - influxdb
+    restart: always
+    volumes:
+      - './influxdb/influxdb.conf:/etc/influxdb/influxdb.conf:ro'
+      - './influxdb/influxdb:/var/lib/influxdb'
+    ports:
+      - "192.168.2.16:8086:8086/tcp" # HTTP API Port
+      - "192.168.2.16:8083:8083/tcp" # Administrator interface port, if it is enabled
+      - "192.168.2.16:2003:2003/tcp" # Graphite support, if it is enabled
+  grafana:
+    image: "grafana/grafana:latest"
+    depends_on:
+      - influxdb
+    networks:
+      - influxdb
+    restart: always
+    environment:
+      GF_SECURITY_ADMIN_PASSWORD: secret
+    volumes:
+      - './grafana/:/var/lib/grafana'
+    user: "472"
+    ports:
+      - "192.168.2.17:3000:3000/tcp" # HTTP port
+
+networks:
+  influxdb:
