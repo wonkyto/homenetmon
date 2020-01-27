@@ -62,7 +62,7 @@ docker build -t wonkyto/telegraf:latest ./
 In order to use the speedtest command you will need to run the speedtest cli command a first time and agree to the license to generate a license file. This can be done by the following:
 
 ```
-docker run --rm -v speedtest/.config:/root/.config wonkyto/telegraf /usr/bin/speedtest --accept-license
+docker run --rm -v /<full-path>/speedtest/.config:/root/.config wonkyto/telegraf /usr/bin/speedtest --accept-license
 ```
 
 This will create a file in: speedtest/.config/ookla/speedtest-cli.json
