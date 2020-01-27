@@ -11,13 +11,34 @@ This requires you to have:
 - Docker
 - Docker Compose
 
-## Starting the system
-Generally everything will need to be owner/group owned by root, except the grafana subdirectory, which should be owned by 472, and is described down in the configuation of grafana below.
+## Quick start
+Ideally you should read all the config options below, but if you just want to start this for the first time and see if things run, try the following steps
 
-Once you have configured everything (see below) simply run:
+* Clone the repo:
 ```
+git clone git@github.com:wonkyto/homenetmon.git
+cd homenetmon
+```
+
+* Change ownership of the grafana directory
+```
+sudo chmod -R 472:472 grafana
+```
+* Start the docker-compose
+```
+# As root
 docker-compose up -d
 ```
+
+* Connect to the grafana instance: http://yourip:3000
+
+* Login as admin/secret
+
+* Create your data source - see the Grafana configuration below
+
+* Create your first dashboard - see the Grafana configuration below
+
+* Now go and read all the config options about enabling speed tests, snmp polling and ping tests!
 
 ## Configuration
 ### Telegraf
