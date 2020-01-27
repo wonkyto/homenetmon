@@ -174,4 +174,3 @@ You can import this by:
 * Hover over the +
 * Click Import
 * Either Click: Upload .json file, or paste content of the example file into the paste field.
-# homenetmon
