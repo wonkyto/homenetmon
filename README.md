@@ -58,6 +58,29 @@ This container can be built by doing the following:
 cd Dockerfiles/telegraf
 docker build -t wonkyto/telegraf:latest ./
 ```
+For pushing multi-arch containers to docker hub I used:
+```
+# On amd64
+docker build -t wonkyto/telegraf:1.0.0-amd64 .
+docker push wonkyto/telegraf:1.0.0-amd64
+
+# On raspi
+docker build -t wonkyto/telegraf:1.0.0-arm32v6 .
+docker push wonkyto/telegraf:1.0.0-arm32v6
+
+# Enable experimental mode to ~/.docker/config.json
+```
+"experimental": "enabled"
+```
+# make multi arch
+docker manifest create wonkyto/telegraf:1.0.0 wonkyto/telegraf:1.0.0-amd64 wonkyto/telegraf:1.0.0-arm32v6
+docker manifest annotate wonkyto/telegraf:1.0.0 wonkyto/telegraf:1.0.0-arm32v6 --os linux --arch arm
+docker manifest push wonkyto/telegraf:1.0.0 --purge
+docker manifest create wonkyto/telegraf:latest wonkyto/telegraf:1.0.0-amd64 wonkyto/telegraf:1.0.0-arm32v6
+docker manifest annotate wonkyto/telegraf:latest wonkyto/telegraf:1.0.0-arm32v6 --os linux --arch arm
+docker manifest push wonkyto/telegraf:latest --purge
+```
+
 #### Generating speedtest license file
 In order to use the speedtest command you will need to run the speedtest cli command a first time and agree to the license to generate a license file. This can be done by the following:
 
@@ -225,3 +248,7 @@ You can import this by:
 * Hover over the +
 * Click Import
 * Either Click: Upload .json file, or paste content of the example file into the paste field.
+
+## References
+- SNMP and Telegraf: https://www.homelabrat.com/snmp-and-telegraf/
+- Multi arch docker hub: see: http://kstobbe.dk/2019/03/14/multi-architecture-images-for-docker-hub/
