@@ -136,6 +136,28 @@ Please see telegraf/telegraf.conf.example for the following section:
       is_tag = true
 ```
 
+#### Configurations for Ping
+In order to catch latency and packet loss, we enable a ping test. In the example configuration in telegraf/telegraf.config.example we ping against 3 endpoints:
+- google.com
+- aussiebroadband.com.au
+- telstra.com
+
+You can add your own endpoints, and also adjust your ping settings.
+```
+[[inputs.ping]]
+  ## Hosts to send ping packets to.
+  urls = ["google.com", "telstra.com", "aussiebroadband.com.au", ]
+  method = "native"
+
+  ## Number of ping packets to send per interval.  Corresponds to the "-c"
+  ## option of the ping command.
+  count = 4
+
+  ## Time to wait between sending ping packets in seconds.  Operates like the
+  ## "-i" option of the ping command.
+  ping_interval = 1.0
+
+```
 ### Influxdb
 We have not made any changes to the influxdb configuration, and are using the basic configuration that influxdb will generate itself. To make things easier we are distributing the same content, but you could generate this yourself
 
