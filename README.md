@@ -69,9 +69,8 @@ docker build -t wonkyto/telegraf:1.0.0-arm32v6 .
 docker push wonkyto/telegraf:1.0.0-arm32v6
 
 # Enable experimental mode to ~/.docker/config.json
-```
 "experimental": "enabled"
-```
+
 # make multi arch
 docker manifest create wonkyto/telegraf:1.0.0 wonkyto/telegraf:1.0.0-amd64 wonkyto/telegraf:1.0.0-arm32v6
 docker manifest annotate wonkyto/telegraf:1.0.0 wonkyto/telegraf:1.0.0-arm32v6 --os linux --arch arm
