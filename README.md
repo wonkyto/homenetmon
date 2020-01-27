@@ -35,7 +35,7 @@ or alternatively, let docker-compose automatically download the image!
 This container can be built by doing the following:
 ```
 cd Dockerfiles/telegraf
-docker build wonkyto/telegraf ./
+docker build -t wonkyto/telegraf:latest ./
 ```
 #### Generating speedtest license file
 In order to use the speedtest command you will need to run the speedtest cli command a first time and agree to the license to generate a license file. This can be done by the following:
