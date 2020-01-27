@@ -25,7 +25,14 @@ We are using a modified version of the offical telegraf docker container. This n
 - the offical Ookla Speedtest cli command
 - snmp mib files
 
-This container can be built by doing the following
+The x86-64 architecture of this container is available from Docker hub:
+This container can be built by doing the following:
+```
+docker pull wonkyto/telegraf:latest
+```
+or alternatively, let docker-compose automatically download the image!
+
+This container can be built by doing the following:
 ```
 cd Dockerfiles/telegraf
 docker build wonkyto/telegraf ./
