@@ -22,7 +22,7 @@ cd homenetmon
 
 * Change ownership of the grafana directory
 ```
-sudo chmod -R 472:472 grafana
+sudo chown -R 472:472 grafana
 ```
 * Start the docker-compose
 ```
