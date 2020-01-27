@@ -192,6 +192,7 @@ In order to create your dashboards you must set up a data source, which will be 
 * Click: Add Data source
 * Click: Influxdb
 * Add http://influxdb:8086 into the HTTP URL field
+* Add telegraf to database field
 * Click Save and Test
 
 Keep in mind we haven't set up any TLS certs or authentication.
