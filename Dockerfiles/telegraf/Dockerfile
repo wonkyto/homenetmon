@@ -1,30 +1,31 @@
-FROM telegraf:latest
+FROM telegraf:1.36
 
-ENV INSTALL_KEY 379CE192D401AB61
+# Enable non-free for snmp-mibs-downloader
+RUN sed -i 's/Components: main/Components: main non-free/g' /etc/apt/sources.list.d/debian.sources 2>/dev/null || \
+    sed -i 's/ main$/ main non-free/g' /etc/apt/sources.list 2>/dev/null || true
 
-# Install snmp mib dependencies
-RUN sed -i /etc/apt/sources.list -e 's/$/ non-free/g'
+# Install base dependencies
+RUN apt-get update && apt-get install -y --no-install-recommends \
+    apt-utils \
+    apt-transport-https \
+    curl \
+    gnupg \
+    snmp \
+    snmp-mibs-downloader \
+  && rm -rf /var/lib/apt/lists/*
 
-# Install dependencies for speedtest
-RUN apt-get update && apt-get install -y apt-utils
+# Setup Speedtest repo (new Ookla location)
+RUN curl -fsSL https://packagecloud.io/ookla/speedtest-cli/gpgkey \
+    | gpg --dearmor -o /usr/share/keyrings/speedtest.gpg \
+  && echo "deb [signed-by=/usr/share/keyrings/speedtest.gpg] https://packagecloud.io/ookla/speedtest-cli/debian/ $(. /etc/os-release && echo $VERSION_CODENAME) main" \
+    > /etc/apt/sources.list.d/speedtest.list \
+  && apt-get update && apt-get install -y --no-install-recommends speedtest \
+  && rm -rf /var/lib/apt/lists/*
 
-RUN apt-get install -y gnupg1 apt-transport-https dirmngr
-
-# Setup Speedtest repos
-RUN apt-key adv --keyserver keyserver.ubuntu.com --recv-keys ${INSTALL_KEY}
-RUN echo "deb https://ookla.bintray.com/debian" `grep VERSION_CODENAME /etc/os-release | sed -e 's/^.*=//'` "main" | tee /etc/apt/sources.list.d/speedtest.list
-
-# Install Snmp Mibs and speedtest
-RUN apt-get update && apt-get install -y \
-  speedtest \
-  snmp \
-  snmp-mibs-downloader
-
-# https://techexpert.tips/grafana/grafana-monitoring-snmp-devices/
-# clearing the snmp config file
-RUN sed -i /etc/snmp/snmp.conf -e 's/^mibs/#mibs/'
+# Disable MIB loading warnings
+RUN sed -i 's/^mibs :/#mibs :/' /etc/snmp/snmp.conf 2>/dev/null || \
+    echo "#mibs :" >> /etc/snmp/snmp.conf
 
 EXPOSE 8125/udp 8092/udp 8094
-
 ENTRYPOINT ["/entrypoint.sh"]
 CMD ["telegraf"]

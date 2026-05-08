@@ -17,7 +17,7 @@ services:
 #      - "8092:8092/udp" # UDP
 #      - "8094:8094/tcp" # TCP
   influxdb:
-    image: "influxdb:latest"
+    image: "influxdb:1.12.4-alpine"
     networks:
       - influxdb
     restart: always
